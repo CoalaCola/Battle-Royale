@@ -17,6 +17,7 @@ class MapViewController: UIViewController {
     var mapView: GMSMapView!
     var placesClient: GMSPlacesClient!
     var zoomLevel: Float = 18.0
+    var circ = GMSCircle()
 
     
     let button: UIButton = {
@@ -67,11 +68,14 @@ class MapViewController: UIViewController {
     @objc func setCircle() {
         if let lat = currentLocation?.coordinate.latitude , let lon = currentLocation?.coordinate.longitude {
             let circleCenter = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-            let circ = GMSCircle(position: circleCenter, radius: 50)
+            mapView.clear()
+            mapView.reloadInputViews()
+            circ = GMSCircle(position: circleCenter, radius: 50)
             circ.fillColor = UIColor(red:0.35, green:0, blue:0, alpha:0.05)
             circ.strokeColor = .red
             circ.strokeWidth = 5
             circ.map = mapView
+            
             
         }
     }
