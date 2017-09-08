@@ -54,6 +54,8 @@ class MapViewController: UIViewController {
                                               zoom: zoomLevel)
         mapView = GMSMapView.map(withFrame: view.bounds, camera: camera)
         mapView.settings.myLocationButton = true
+        mapView.settings.compassButton = true
+        
         //mapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         mapView.translatesAutoresizingMaskIntoConstraints = false
         mapView.isMyLocationEnabled = true
@@ -61,7 +63,7 @@ class MapViewController: UIViewController {
         // Add the map to the view, hide it until we've got a location update.
         view.addSubview(mapView)
         
-        mapView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        mapView.topAnchor.constraint(equalTo: view.topAnchor, constant: 64).isActive = true
         mapView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         mapView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -128).isActive = true
@@ -81,14 +83,11 @@ class MapViewController: UIViewController {
         nextButton.rightAnchor.constraint(equalTo: mapView.rightAnchor).isActive = true
         nextButton.heightAnchor.constraint(equalToConstant: 64).isActive = true
         
-        
-        
-        
     }
     
     @objc func setCircle() {
         if let lat = currentLocation?.coordinate.latitude , let lon = currentLocation?.coordinate.longitude {
-            let circleCenter = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+            //let circleCenter = CLLocationCoordinate2D(latitude: lat, longitude: lon)
             let nextLat = Double(lat) + 0.0013
             nextCircleCorordinate = CLLocationCoordinate2D(latitude: nextLat, longitude: lon)
             mapView.clear()
@@ -111,10 +110,14 @@ class MapViewController: UIViewController {
             nextController.coordinator = nextCircleCorordinate
            
             
-            navigationController?.show(nextController, sender: nil)
+            show(nextController, sender: nil)
             
         }
     }
+    
+    
+    
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let nextCircleController = segue.destination as? NextCircleViewController
         nextCircleController?.nextCircleCorordinate = self.nextCircleCorordinate!
